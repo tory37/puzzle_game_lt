@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
         RotatePlayer();
         JumpPlayer();
         RotateCamera();
+        ZoomCamera();
     }
 
     private void MovePlayer()
@@ -94,5 +95,10 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Mouse X");
         float verticalInput = Input.GetAxis("Mouse Y");
         cameraController.RotateCamera(horizontalInput, verticalInput);
+    }
+
+    private void ZoomCamera() {
+        float zoomInput = Input.GetAxis("Scroll");
+        cameraController.ZoomCamera(zoomInput);
     }
 }

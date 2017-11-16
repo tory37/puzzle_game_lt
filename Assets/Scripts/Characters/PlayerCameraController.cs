@@ -8,12 +8,21 @@ public class PlayerCameraController : MonoBehaviour {
     private float cameraHorizontalSpeed = 5.0f;
     [SerializeField]
     private float cameraVerticalSpeed = 5.0f;
+    [SerializeField]
+    private float cameraZoomSpeed = 5.0f;
 
     [SerializeField]
     private float minVerticalAngle;
     [SerializeField]
     private float maxVerticalAngle;
 
+    [SerializeField]
+    private Vector3 closestCameraOffset;
+    [SerializeField]
+    private Vector3 farthestCameraOffset;
+
+    [SerializeField]
+    private Transform cameraTransform;
     [SerializeField]
     private Transform cameraRigX;
     [SerializeField]
@@ -28,12 +37,13 @@ public class PlayerCameraController : MonoBehaviour {
 
     public void RotateCamera(float horizontalInput, float verticalInput) {
         float deltaHorizontal = horizontalInput * cameraHorizontalSpeed * Time.deltaTime;
-        float deltaVertical = verticalInput * cameraVerticalSpeed * Time.deltaTime;
 
         Quaternion oldRotation = cameraRigX.rotation;
 
-        if (!deltaVertical.Equals(0.0f))
+        if (!verticalInput.Equals(0.0f))
         {
+            float deltaVertical = verticalInput * cameraVerticalSpeed * Time.deltaTime;
+
             // Moving towards maxVerticalAngle
             if (deltaVertical > 0.0f)
             {
@@ -49,5 +59,26 @@ public class PlayerCameraController : MonoBehaviour {
                 cameraRigX.rotation = Quaternion.RotateTowards(cameraRigX.rotation, targetQuaternionRotation, -deltaVertical);
             }
         }
+    }
+
+    public void ZoomCamera(float input) {
+        if (!input.Equals(0.0f))
+        {
+            float deltaZoom = input * cameraZoomSpeed * Time.deltaTime;
+            Debug.Log(deltaZoom);
+
+            // Moving towards maxVerticalAngle
+            if (deltaZoom > 0.0f)
+            {
+                cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, closestCameraOffset, deltaZoom);
+            }
+            // Moving towards minVerticalAngle
+            else if (deltaZoom < 0.0f)
+            {
+                cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, farthestCameraOffset, -deltaZoom);
+            }
+        }
+
+
     }
 }

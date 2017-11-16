@@ -527,9 +527,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraHorizontalSpeed: 5
-  cameraVerticalSpeed: 30
-  minVerticalAngle: -15
+  cameraVerticalSpeed: 50
+  cameraZoomSpeed: 30
+  minVerticalAngle: -10
   maxVerticalAngle: 45
+  closestCameraOffset: {x: 0, y: 2, z: 0}
+  farthestCameraOffset: {x: 1.3, y: 2, z: -15}
+  cameraTransform: {fileID: 1274701613}
   cameraRigX: {fileID: 1788288666}
   cameraRigY: {fileID: 1296677092}
 --- !u!1 &1788288665
