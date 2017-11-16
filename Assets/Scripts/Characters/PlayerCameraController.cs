@@ -16,26 +16,38 @@ public class PlayerCameraController : MonoBehaviour {
 
     [SerializeField]
     private Transform cameraRigX;
+    [SerializeField]
     private Transform cameraRigY;
 
-    public void RotCam(Vector3 playerForward)
-    {
-        float verticalInput = Input.GetAxis("Mouse Y");
-        cameraRig.Rotate(new Vector3(verticalInput * cameraVerticalSpeed * Time.deltaTime, 0f, 0f));
-        Debug.Log(Vector3.Angle(playerForward, cameraRig.forward));
-    }
+    //public void RotCam(Vector3 playerForward)
+    //{
+    //    float verticalInput = Input.GetAxis("Mouse Y");
+    //    cameraRigX.Rotate(new Vector3(verticalInput * cameraVerticalSpeed * Time.deltaTime, 0f, 0f));
+    //    Debug.Log(Vector3.Angle(playerForward, cameraRig.forward));
+    //}
 
-    public void RotateCamera(float horiontalInput, float verticalInput) {
-        float deltaHorizontal = horiontalInput * cameraHorizontalSpeed * Time.deltaTime;
+    public void RotateCamera(float horizontalInput, float verticalInput) {
+        float deltaHorizontal = horizontalInput * cameraHorizontalSpeed * Time.deltaTime;
         float deltaVertical = verticalInput * cameraVerticalSpeed * Time.deltaTime;
 
-        Vector3 oldRotation = cameraRig.rotation.eulerAngles;
+        Quaternion oldRotation = cameraRigX.rotation;
 
-        float oldRotationX = oldRotation.x;
-        float newRotationX = oldRotationX + deltaVertical;
-
-        if (verticalInput > 0) {
-            //if (Mathf.Abs(0 - ))
+        if (!deltaVertical.Equals(0.0f))
+        {
+            // Moving towards maxVerticalAngle
+            if (deltaVertical > 0.0f)
+            {
+                Vector3 targetVectorRotation = new Vector3(maxVerticalAngle, cameraRigX.eulerAngles.y, cameraRigX.eulerAngles.z);
+                Quaternion targetQuaternionRotation = Quaternion.Euler(targetVectorRotation);
+                cameraRigX.rotation = Quaternion.RotateTowards(cameraRigX.rotation, targetQuaternionRotation, deltaVertical);
+            }
+            // Moving towards minVerticalAngle
+            else if (deltaVertical < 0.0f)
+            {
+                Vector3 targetVectorRotation = new Vector3(minVerticalAngle, cameraRigX.eulerAngles.y, cameraRigX.eulerAngles.z);
+                Quaternion targetQuaternionRotation = Quaternion.Euler(targetVectorRotation);
+                cameraRigX.rotation = Quaternion.RotateTowards(cameraRigX.rotation, targetQuaternionRotation, -deltaVertical);
+            }
         }
     }
 }

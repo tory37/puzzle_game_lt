@@ -93,6 +93,6 @@ public class PlayerController : MonoBehaviour
     private void RotateCamera() {
         float horizontalInput = Input.GetAxis("Mouse X");
         float verticalInput = Input.GetAxis("Mouse Y");
-        cameraController.RotCam(playerTransform.forward);
+        cameraController.RotateCamera(horizontalInput, verticalInput);
     }
 }
