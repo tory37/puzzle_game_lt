@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     [SerializeField]
     private PlayerMovement playerMovement;
+    [SerializeField]
+    private PlayerCameraController cameraController;
 
     [SerializeField]
     private Rigidbody playerRigidBody;
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         RotatePlayer();
         JumpPlayer();
+        RotateCamera();
     }
 
     private void MovePlayer()
@@ -85,5 +88,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void RotateCamera() {
+        float horizontalInput = Input.GetAxis("Mouse X");
+        float verticalInput = Input.GetAxis("Mouse Y");
+        cameraController.RotateCamera(horizontalInput, verticalInput);
     }
 }
