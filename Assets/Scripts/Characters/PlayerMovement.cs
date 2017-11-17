@@ -22,22 +22,20 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    public void Move(Transform transform, Rigidbody rigidBody, float forwardInput, float strafeInput) {
+    public void Move(Rigidbody rigidBody, float forwardInput, float strafeInput, Vector3 forwardDirection, Vector3 rightDirection) {
         float deltaForward = forwardInput * forwardSpeed * Time.deltaTime;
         float deltaStrafe = strafeInput * strafeSpeed * Time.deltaTime;
 
-        Vector3 deltaForwardVector = deltaForward * transform.forward;
-        Vector3 deltaStrafeVector = deltaStrafe * transform.right;
+        Vector3 deltaForwardVector = deltaForward * forwardDirection;
+        Vector3 deltaStrafeVector = deltaStrafe * rightDirection;
         Vector3 deltaMovementVector = deltaForwardVector + deltaStrafeVector;
 
         rigidBody.MovePosition(rigidBody.position + deltaMovementVector);
     }
 
-    public void Rotate(Rigidbody rigidBody, float horizontalInput) {
-        float deltaHorizontal = horizontalInput * rotateSpeed * Time.deltaTime;
-        Vector3 deltaVectorRotation = new Vector3(0.0f, deltaHorizontal, 0.0f);
-        Quaternion deltaQuaternionRotation = Quaternion.Euler(deltaVectorRotation);
-        rigidBody.MoveRotation(rigidBody.rotation * deltaQuaternionRotation);
+    public void Rotate(Transform modelTransform, Quaternion targetRotation) {
+        Quaternion newRotation = Quaternion.RotateTowards(modelTransform.rotation, targetRotation, rotateSpeed);
+        modelTransform.rotation = targetRotation;
     }
 
     public void Jump(Rigidbody rigidBody) {

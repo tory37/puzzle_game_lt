@@ -36,10 +36,9 @@ public class PlayerCameraController : MonoBehaviour {
     //}
 
     public void RotateCamera(float horizontalInput, float verticalInput) {
-        float deltaHorizontal = horizontalInput * cameraHorizontalSpeed * Time.deltaTime;
-
         Quaternion oldRotation = cameraRigX.rotation;
 
+        // Rotate Vertical
         if (!verticalInput.Equals(0.0f))
         {
             float deltaVertical = verticalInput * cameraVerticalSpeed * Time.deltaTime;
@@ -58,6 +57,14 @@ public class PlayerCameraController : MonoBehaviour {
                 Quaternion targetQuaternionRotation = Quaternion.Euler(targetVectorRotation);
                 cameraRigX.rotation = Quaternion.RotateTowards(cameraRigX.rotation, targetQuaternionRotation, -deltaVertical);
             }
+        }
+
+        // Rotate Horizontal
+        if (!horizontalInput.Equals(0.0f)) {
+            float deltaHorizontal = horizontalInput * cameraHorizontalSpeed * Time.deltaTime;
+
+            Vector3 deltaVectorRotation = cameraRigY.up * deltaHorizontal;
+            cameraRigY.Rotate(deltaVectorRotation);
         }
     }
 
@@ -78,7 +85,9 @@ public class PlayerCameraController : MonoBehaviour {
                 cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, farthestCameraOffset, -deltaZoom);
             }
         }
+    }
 
-
+    public Transform GetCameraRigYTransform() {
+        return cameraRigY;
     }
 }
