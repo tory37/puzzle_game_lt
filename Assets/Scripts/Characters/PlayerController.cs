@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Rigidbody playerRigidBody;
 
+    [SerializeField]
+    private Transform modelTransform;
+
     private Transform playerTransform;
 
     #endregion
@@ -50,13 +53,22 @@ public class PlayerController : MonoBehaviour
     {
         float forwardInput = Input.GetAxis("Vertical");
         float strafeInput = Input.GetAxis("Horizontal");
-        playerMovement.Move(playerTransform, playerRigidBody, forwardInput, strafeInput);
+        Transform cameraRigYTransform = cameraController.GetCameraRigYTransform();
+        Vector3 forwardDirection = cameraRigYTransform.forward;
+        Vector3 rightDirection = cameraRigYTransform.right;
+        playerMovement.Move(playerRigidBody, forwardInput, strafeInput, forwardDirection, rightDirection);
     }
 
     private void RotatePlayer()
     {
-        float horizontalInput = Input.GetAxis("Mouse X");
-        playerMovement.Rotate(playerRigidBody, horizontalInput);
+        bool rightMouse = Input.GetButton("Mouse Right");
+        float forwardInput = Input.GetAxis("Vertical");
+        float strafeInput = Input.GetAxis("Horizontal");
+        if (rightMouse || !forwardInput.Equals(0.0f) || !strafeInput.Equals(0.0f))
+        {
+            float horizontalInput = Input.GetAxis("Mouse X");
+            playerMovement.Rotate(modelTransform, cameraController.GetCameraRigYTransform().rotation);
+        }
     }
 
     private void JumpPlayer()
