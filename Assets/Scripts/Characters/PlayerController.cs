@@ -42,33 +42,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        MovePlayer();
-        RotatePlayer();
         JumpPlayer();
         RotateCamera();
         ZoomCamera();
-    }
-
-    private void MovePlayer()
-    {
-        float forwardInput = Input.GetAxis("Vertical");
-        float strafeInput = Input.GetAxis("Horizontal");
-        Transform cameraRigYTransform = cameraController.GetCameraRigYTransform();
-        Vector3 forwardDirection = cameraRigYTransform.forward;
-        Vector3 rightDirection = cameraRigYTransform.right;
-        playerMovement.Move(playerRigidBody, forwardInput, strafeInput, forwardDirection, rightDirection);
-    }
-
-    private void RotatePlayer()
-    {
-        bool rightMouse = Input.GetButton("Mouse Right");
-        float forwardInput = Input.GetAxis("Vertical");
-        float strafeInput = Input.GetAxis("Horizontal");
-        if (rightMouse || !forwardInput.Equals(0.0f) || !strafeInput.Equals(0.0f))
-        {
-            float horizontalInput = Input.GetAxis("Mouse X");
-            playerMovement.Rotate(modelTransform, cameraController.GetCameraRigYTransform().rotation);
-        }
     }
 
     private void JumpPlayer()
