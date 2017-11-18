@@ -553,6 +553,11 @@ MonoBehaviour:
   strafeSpeed: 5
   rotateSpeed: 50
   jumpHeight: 1
+  jumpRaycastOffset: {x: 0, y: 0, z: 0}
+  jumpRaycastDistance: 0.5
+  jumpRaycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   targetRotationTransform: {fileID: 1296677092}
   modelTransform: {fileID: 1121169180}
 --- !u!114 &1600705819

@@ -19,6 +19,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump")]
     [SerializeField]
     private float jumpHeight = 1.0f;
+    [SerializeField]
+    private Vector3 jumpRaycastOffset;
+    [SerializeField]
+    private float jumpRaycastDistance;
+    [SerializeField]
+    private LayerMask jumpRaycastLayerMask;
 
     [Header("Components")]
     [SerializeField]
@@ -34,9 +40,10 @@ public class PlayerMovement : MonoBehaviour
         targetRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         Move();
         Rotate();
+        Jump();
     }
 
     public void Move() {
@@ -62,9 +69,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void Jump(Rigidbody rigidBody) {
-        Vector3 gravity = Physics.gravity;
-        rigidBody.velocity = -gravity * jumpHeight;
+    public void Jump() {
+        #if UNITY_EDITOR
+        Debug.DrawRay(targetRigidbody.position + jumpRaycastOffset, -targetRigidbody.transform.up * jumpRaycastDistance, Color.red);
+        #endif
+
+        if (CanJump())
+        {
+            bool jumpInput = Input.GetButtonDown("Jump");
+            if (jumpInput)
+            {
+                Vector3 gravity = Physics.gravity;
+                targetRigidbody.velocity = -gravity * jumpHeight;
+            }
+        }
     }
 
     private bool ShouldRotateModel() {
@@ -73,5 +91,23 @@ public class PlayerMovement : MonoBehaviour
         bool bStrafing = !Input.GetAxis(InputNames.Strafe).Equals(0.0f);
 
         return bLookButtonHeld || bMovingForward || bStrafing;
+    }
+
+    private bool CanJump()
+    {
+        RaycastHit raycastHit;
+        if (Physics.Raycast(targetRigidbody.position + jumpRaycastOffset, -targetRigidbody.transform.up, out raycastHit, jumpRaycastDistance, jumpRaycastLayerMask))
+        {
+            Collider otherCollider = raycastHit.collider;
+            MultiTagSystem otherTags = otherCollider.GetComponent<MultiTagSystem>();
+            if (otherTags)
+            {
+                if (otherTags.HasTag(MultiTag.Jumpable))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

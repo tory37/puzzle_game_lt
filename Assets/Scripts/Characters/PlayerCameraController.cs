@@ -53,11 +53,16 @@ public class PlayerCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        RotateCamera();
+        ZoomCamera();
         cameraTransform.localPosition = storedCameraLocalPosition;
     }
 
-    public void RotateCamera(float horizontalInput, float verticalInput)
+    public void RotateCamera()
     {
+        float verticalInput = Input.GetAxis(InputNames.Mouse_Y);
+        float horizontalInput = Input.GetAxis(InputNames.Mouse_X);
+
         Quaternion oldRotation = cameraRigX.rotation;
 
         // Rotate Vertical
@@ -91,11 +96,13 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
-    public void ZoomCamera(float input)
+    public void ZoomCamera()
     {
-        if (!input.Equals(0.0f))
+        float zoomInput = Input.GetAxis(InputNames.Scroll);
+
+        if (!zoomInput.Equals(0.0f))
         {
-            float deltaZoom = input * cameraZoomSpeed * Time.deltaTime;
+            float deltaZoom = zoomInput * cameraZoomSpeed * Time.deltaTime;
             Debug.Log(deltaZoom);
 
             // Moving towards maxVerticalAngle
