@@ -2,25 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCameraController : MonoBehaviour {
+public class PlayerCameraController : MonoBehaviour
+{
 
-    [SerializeField]
-    private float cameraHorizontalSpeed = 5.0f;
-    [SerializeField]
-    private float cameraVerticalSpeed = 5.0f;
-    [SerializeField]
-    private float cameraZoomSpeed = 5.0f;
+    #region Variables
 
-    [SerializeField]
-    private float minVerticalAngle;
-    [SerializeField]
-    private float maxVerticalAngle;
-
-    [SerializeField]
-    private Vector3 closestCameraOffset;
-    [SerializeField]
-    private Vector3 farthestCameraOffset;
-
+    [Header("Components")]
     [SerializeField]
     private Transform cameraTransform;
     [SerializeField]
@@ -28,14 +15,54 @@ public class PlayerCameraController : MonoBehaviour {
     [SerializeField]
     private Transform cameraRigY;
 
-    //public void RotCam(Vector3 playerForward)
-    //{
-    //    float verticalInput = Input.GetAxis("Mouse Y");
-    //    cameraRigX.Rotate(new Vector3(verticalInput * cameraVerticalSpeed * Time.deltaTime, 0f, 0f));
-    //    Debug.Log(Vector3.Angle(playerForward, cameraRig.forward));
-    //}
+    [Header("Horizontal Rotation")]
+    [SerializeField]
+    private float cameraHorizontalSpeed = 5.0f;
 
-    public void RotateCamera(float horizontalInput, float verticalInput) {
+    [Header("Vertical Rotation")]
+    [SerializeField]
+    private float cameraVerticalSpeed = 5.0f;
+    [SerializeField]
+    private float minVerticalAngle;
+    [SerializeField]
+    private float maxVerticalAngle;
+
+    [Header("Zoom")]
+    [SerializeField]
+    private float cameraZoomSpeed = 5.0f;
+    [SerializeField]
+    private Vector3 closestCameraOffset;
+    [SerializeField]
+    private Vector3 farthestCameraOffset;
+
+    [Header("Collision")]
+    [SerializeField]
+    private float collisionCheckRaycastLength;
+    [SerializeField]
+    private float collisionCheckRaycastDeadzone;
+
+    private Vector3 storedCameraLocalPosition;
+
+    #endregion
+
+    #region Methods
+
+    private void Start() {
+        storedCameraLocalPosition = cameraTransform.position;
+    }
+
+    private void LateUpdate()
+    {
+        RotateCamera();
+        ZoomCamera();
+        cameraTransform.localPosition = storedCameraLocalPosition;
+    }
+
+    public void RotateCamera()
+    {
+        float verticalInput = Input.GetAxis(InputNames.Mouse_Y);
+        float horizontalInput = Input.GetAxis(InputNames.Mouse_X);
+
         Quaternion oldRotation = cameraRigX.rotation;
 
         // Rotate Vertical
@@ -60,7 +87,8 @@ public class PlayerCameraController : MonoBehaviour {
         }
 
         // Rotate Horizontal
-        if (!horizontalInput.Equals(0.0f)) {
+        if (!horizontalInput.Equals(0.0f))
+        {
             float deltaHorizontal = horizontalInput * cameraHorizontalSpeed * Time.deltaTime;
 
             Vector3 deltaVectorRotation = cameraRigY.up * deltaHorizontal;
@@ -68,26 +96,39 @@ public class PlayerCameraController : MonoBehaviour {
         }
     }
 
-    public void ZoomCamera(float input) {
-        if (!input.Equals(0.0f))
+    public void ZoomCamera()
+    {
+        float zoomInput = Input.GetAxis(InputNames.Scroll);
+
+        if (!zoomInput.Equals(0.0f))
         {
-            float deltaZoom = input * cameraZoomSpeed * Time.deltaTime;
+            float deltaZoom = zoomInput * cameraZoomSpeed * Time.deltaTime;
             Debug.Log(deltaZoom);
 
             // Moving towards maxVerticalAngle
             if (deltaZoom > 0.0f)
             {
-                cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, closestCameraOffset, deltaZoom);
+                storedCameraLocalPosition = Vector3.MoveTowards(cameraTransform.localPosition, closestCameraOffset, deltaZoom);
             }
             // Moving towards minVerticalAngle
             else if (deltaZoom < 0.0f)
             {
-                cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, farthestCameraOffset, -deltaZoom);
+                storedCameraLocalPosition = Vector3.MoveTowards(cameraTransform.localPosition, farthestCameraOffset, -deltaZoom);
             }
         }
     }
 
-    public Transform GetCameraRigYTransform() {
+    public Transform GetCameraRigYTransform()
+    {
         return cameraRigY;
     }
+
+    private void CheckCollision() {
+        RaycastHit hit;
+        if (Physics.Raycast(cameraTransform.position, -cameraTransform.forward, out hit, collisionCheckRaycastLength )) {
+            
+        }
+    }
+
+    #endregion
 }
