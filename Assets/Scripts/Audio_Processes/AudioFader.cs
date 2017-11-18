@@ -19,7 +19,7 @@ public class AudioFader : MonoBehaviour
 
 	}
 
-	IEnumerator OnTriggerEnter2D(Collider2D other)
+	IEnumerator OnTriggerEnter(Collider other)
 	{
         //Turn on AudioSource
 		audiosource.enabled = true;
@@ -28,7 +28,7 @@ public class AudioFader : MonoBehaviour
 		yield return StartCoroutine(FadeIn());
 	}
 
-	IEnumerator OnTriggerExit2D(Collider2D other)
+	IEnumerator OnTriggerExit(Collider other)
 	{
         //Fade out first before AudioSource is turned off
 		yield return StartCoroutine(FadeOut());
