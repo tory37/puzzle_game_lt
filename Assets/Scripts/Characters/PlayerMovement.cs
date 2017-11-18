@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start() {
         targetRigidbody = GetComponent<Rigidbody>();
+        Cursor.visible = false;
     }
 
     private void FixedUpdate() {
