@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private PlayerMovement playerMovement;
     [SerializeField]
-    private PlayerCameraController cameraController;
+    private ThirdPersonCameraController cameraController;
 
     [SerializeField]
     private Rigidbody playerRigidBody;

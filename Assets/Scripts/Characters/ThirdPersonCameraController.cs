@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCameraController : MonoBehaviour
+public class ThirdPersonCameraController : MonoBehaviour
 {
 
     #region Variables
 
     [Header("Components")]
     [SerializeField]
+    [Tooltip("Transform of the camera for this controller")]
     private Transform cameraTransform;
     [SerializeField]
     private Transform cameraRigX;
@@ -17,10 +18,12 @@ public class PlayerCameraController : MonoBehaviour
 
     [Header("Horizontal Rotation")]
     [SerializeField]
+    [Tooltip("Camera Horizontal Speed")]
     private float cameraHorizontalSpeed = 5.0f;
 
     [Header("Vertical Rotation")]
     [SerializeField]
+    [Tooltip("Camera Vertical Speed")]
     private float cameraVerticalSpeed = 5.0f;
     [SerializeField]
     private float minVerticalAngle;
@@ -31,31 +34,33 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField]
     private float cameraZoomSpeed = 5.0f;
     [SerializeField]
-    private Vector3 closestCameraOffset;
-    [SerializeField]
+    [Tooltip("Farthest Camera Offset")]
     private Vector3 farthestCameraOffset;
 
     [Header("Collision")]
     [SerializeField]
-    private float collisionCheckRaycastLength;
-    [SerializeField]
-    private float collisionCheckRaycastDeadzone;
+    [Tooltip("Camera Adjustment Speed")]
+    private float cameraAdjustmentSpeed;
 
-    private Vector3 storedCameraLocalPosition;
+    private Vector3 userTargetCameraPosition;
+    private Vector3 targetCameraLocalPosition;
 
     #endregion
 
     #region Methods
 
-    private void Start() {
-        storedCameraLocalPosition = cameraTransform.position;
+    private void Start()
+    {
+        targetCameraLocalPosition = cameraTransform.position;
+        userTargetCameraPosition = cameraTransform.position;
+        cameraTransform.localPosition = farthestCameraOffset;
     }
 
     private void LateUpdate()
     {
         RotateCamera();
         ZoomCamera();
-        cameraTransform.localPosition = storedCameraLocalPosition;
+        MoveCamera();
     }
 
     public void RotateCamera()
@@ -103,17 +108,16 @@ public class PlayerCameraController : MonoBehaviour
         if (!zoomInput.Equals(0.0f))
         {
             float deltaZoom = zoomInput * cameraZoomSpeed * Time.deltaTime;
-            Debug.Log(deltaZoom);
 
             // Moving towards maxVerticalAngle
             if (deltaZoom > 0.0f)
             {
-                storedCameraLocalPosition = Vector3.MoveTowards(cameraTransform.localPosition, closestCameraOffset, deltaZoom);
+                userTargetCameraPosition = Vector3.MoveTowards(userTargetCameraPosition, Vector3.zero, deltaZoom);
             }
             // Moving towards minVerticalAngle
             else if (deltaZoom < 0.0f)
             {
-                storedCameraLocalPosition = Vector3.MoveTowards(cameraTransform.localPosition, farthestCameraOffset, -deltaZoom);
+                userTargetCameraPosition = Vector3.MoveTowards(userTargetCameraPosition, farthestCameraOffset, -deltaZoom);
             }
         }
     }
@@ -123,12 +127,48 @@ public class PlayerCameraController : MonoBehaviour
         return cameraRigY;
     }
 
-    private void CheckCollision() {
-        RaycastHit hit;
-        if (Physics.Raycast(cameraTransform.position, -cameraTransform.forward, out hit, collisionCheckRaycastLength )) {
-            
-        }
+    private Vector3 GetAdjustedCollidingCameraTargetPosition(RaycastHit hit)
+    {
+        Vector3 hitLocalToRig = cameraRigX.InverseTransformPoint(hit.point);
+        Vector3 direction = hitLocalToRig.normalized;
+        float hitDistance = hitLocalToRig.magnitude;
+        Vector3 targetLocalPosition = direction * (hitDistance - 0.05f);
+        return targetLocalPosition;
     }
 
-    #endregion
+    private void MoveCamera()
+    {
+        SetTargetPosition();
+        cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, targetCameraLocalPosition, cameraAdjustmentSpeed * Time.deltaTime);
+    }
+
+    private void SetTargetPosition() 
+    {
+        float cameraDistance = cameraTransform.localPosition.magnitude;
+        
+#if UNITY_EDITOR
+        Vector3 rigPosition = cameraRigY.position;
+        Debug.DrawRay(rigPosition, (cameraTransform.position - cameraRigX.transform.position).normalized * farthestCameraOffset.magnitude, Color.green);
+#endif
+
+        RaycastHit hit;
+        bool bIsHitting = Physics.Raycast(cameraRigY.position, (cameraTransform.position - cameraRigX.transform.position).normalized, out hit, farthestCameraOffset.magnitude);
+        if (bIsHitting) {
+            Debug.DrawRay(hit.point, Vector3.up * 10, Color.black);
+            MultiTagSystem tags = hit.transform.GetComponent<MultiTagSystem>();
+            if (tags && tags.HasTag(MultiTag.MoveCameraOnCollision))
+            {
+                if (userTargetCameraPosition.magnitude > cameraRigY.InverseTransformPoint(hit.point).magnitude)
+                {
+                    targetCameraLocalPosition = GetAdjustedCollidingCameraTargetPosition(hit);
+                    return;
+                }
+            }
+        }
+
+        //Else
+        targetCameraLocalPosition = userTargetCameraPosition;
+    }
+
+#endregion
 }
