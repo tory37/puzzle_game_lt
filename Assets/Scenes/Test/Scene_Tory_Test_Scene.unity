@@ -155,50 +155,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
-        type: 2}
-      propertyPath: collisionCheckRaycastLength
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
-        type: 2}
-      propertyPath: collisionCheckRaycastDeadzone
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
-        type: 2}
-      propertyPath: cameraAdjustmentSpeed
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
-        type: 2}
-      propertyPath: closestDistanceToCollidables
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
-        type: 2}
-      propertyPath: collisionCheckRaycastRadius
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4291621364246630, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1.57
-      objectReference: {fileID: 0}
-    - target: {fileID: 4291621364246630, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4671631328913128, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4671631328913128, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4671631328913128, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -2.75
+    - target: {fileID: 1304519646105602, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
+      propertyPath: m_Icon
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}

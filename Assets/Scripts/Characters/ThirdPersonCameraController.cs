@@ -39,15 +39,6 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     [Header("Collision")]
     [SerializeField]
-    [Tooltip("Collision Check Raycast Length")]
-    private float collisionCheckRaycastLength;
-    [SerializeField]
-    [Tooltip("Collision Check Spherecast Radius")]
-    private float collisionCheckRaycastRadius;
-    [SerializeField]
-    [Tooltip("Closest Distance Camera Can Be To Objects It Shouldn't Clip")]
-    private float closestDistanceToCollidables;
-    [SerializeField]
     [Tooltip("Camera Adjustment Speed")]
     private float cameraAdjustmentSpeed;
 
@@ -62,7 +53,6 @@ public class ThirdPersonCameraController : MonoBehaviour
     {
         targetCameraLocalPosition = cameraTransform.position;
         userTargetCameraPosition = cameraTransform.position;
-        collisionCheckRaycastLength = closestDistanceToCollidables * 5;
         cameraTransform.localPosition = farthestCameraOffset;
     }
 
