@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum MultiTag {
-    Jumpable
+    // This is a solid object for player to jump off of
+    Jumpable,
+    // This means that the camera should not collide into this object
+    MoveCameraOnCollision,
+    // This means the renderer should turn off when a camera collides with it
+    ToggleRendererOnCameraCollision
+
 }
 
 public class MultiTagSystem : MonoBehaviour {
