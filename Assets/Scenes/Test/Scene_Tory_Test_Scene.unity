@@ -162,6 +162,65 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &169023003 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1304519646105602, guid: 83a40f59b791d45c488e23a27bf367fe,
+    type: 2}
+  m_PrefabInternal: {fileID: 169023002}
+--- !u!114 &169023004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 169023003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5a5c41b48b24170b652d603ad98866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  logMessage: Third Ability
+--- !u!114 &169023005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 169023003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5a5c41b48b24170b652d603ad98866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  logMessage: Second Ability
+--- !u!114 &169023006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 169023003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5a5c41b48b24170b652d603ad98866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  logMessage: First Ability
+--- !u!114 &169023007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 169023003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a3773d49cac44b7ae89a25b7dee223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilities:
+  - {fileID: 169023006}
+  - {fileID: 169023005}
+  - {fileID: 169023004}
 --- !u!1001 &325716056
 Prefab:
   m_ObjectHideFlags: 0
