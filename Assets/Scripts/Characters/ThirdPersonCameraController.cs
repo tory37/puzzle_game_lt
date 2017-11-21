@@ -18,6 +18,8 @@ public class ThirdPersonCameraController : MonoBehaviour
     private Transform cameraRigX;
     [SerializeField]
     private Transform cameraRigY;
+    [SerializeField]
+    private CameraTrigger cameraTrigger;
 
     [Header("Horizontal Rotation")]
     [SerializeField]
@@ -65,6 +67,8 @@ public class ThirdPersonCameraController : MonoBehaviour
 
         rotationEnabled = true;
         zoomEnabled = true;
+
+        cameraTrigger.Subscribe(HandleOnCameraTriggerEnter, HandleOnCameraTriggerExit);
     }
 
     private void LateUpdate()
@@ -296,6 +300,16 @@ public class ThirdPersonCameraController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void HandleOnCameraTriggerEnter(Collider enteredCollider)
+    {
+        enteredCollider.GetComponent<Renderer>().enabled = false;
+    }
+
+    private void HandleOnCameraTriggerExit(Collider exitedCollider)
+    {
+        exitedCollider.GetComponent<Renderer>().enabled = true;
     }
 
     #endregion
