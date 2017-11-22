@@ -164,6 +164,16 @@ Prefab:
       propertyPath: cameraTrigger
       value: 
       objectReference: {fileID: 705574174}
+    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
+        type: 2}
+      propertyPath: playerRenderer
+      value: 
+      objectReference: {fileID: 990490869}
+    - target: {fileID: 114561788523127002, guid: 83a40f59b791d45c488e23a27bf367fe,
+        type: 2}
+      propertyPath: cameraPlayerRendererToggleDistance
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 135375953537202732, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 83a40f59b791d45c488e23a27bf367fe, type: 2}
@@ -698,7 +708,7 @@ SphereCollider:
   m_GameObject: {fileID: 705574172}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -717,6 +727,11 @@ Transform:
 --- !u!1 &990490867 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1581757246375294, guid: 83a40f59b791d45c488e23a27bf367fe,
+    type: 2}
+  m_PrefabInternal: {fileID: 169023002}
+--- !u!137 &990490869 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137080985719187132, guid: 83a40f59b791d45c488e23a27bf367fe,
     type: 2}
   m_PrefabInternal: {fileID: 169023002}
 --- !u!135 &990490870

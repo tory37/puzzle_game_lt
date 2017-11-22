@@ -20,6 +20,8 @@ public class ThirdPersonCameraController : MonoBehaviour
     private Transform cameraRigY;
     [SerializeField]
     private CameraTrigger cameraTrigger;
+    [SerializeField]
+    private Renderer playerRenderer;
 
     [Header("Horizontal Rotation")]
     [SerializeField]
@@ -46,6 +48,8 @@ public class ThirdPersonCameraController : MonoBehaviour
     [SerializeField]
     [Tooltip("Camera Adjustment Speed")]
     private float cameraAdjustmentSpeed;
+    [SerializeField]
+    private float cameraPlayerRendererToggleDistance;
 
     private Vector3 userTargetCameraPosition;
     private Vector3 targetCameraLocalPosition;
@@ -161,7 +165,24 @@ public class ThirdPersonCameraController : MonoBehaviour
     private void MoveCamera()
     {
         SetTargetPosition();
-        cameraTransform.localPosition = Vector3.MoveTowards(cameraTransform.localPosition, targetCameraLocalPosition, cameraAdjustmentSpeed * Time.deltaTime);
+        Vector3 targetLocalPosition = Vector3.MoveTowards(cameraTransform.localPosition, targetCameraLocalPosition, cameraAdjustmentSpeed * Time.deltaTime);
+        if (targetLocalPosition != cameraTransform.localPosition)
+        {
+            cameraTransform.localPosition = targetLocalPosition;
+            CheckPlayerCameraDistance();
+        }
+    }
+
+    private void CheckPlayerCameraDistance()
+    {
+        if (cameraTransform.localPosition.magnitude <= cameraPlayerRendererToggleDistance)
+        {
+            playerRenderer.enabled = false;
+        }
+        else
+        {
+            playerRenderer.enabled = true;
+        }
     }
 
     private void SetTargetPosition()

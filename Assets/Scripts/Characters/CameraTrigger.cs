@@ -19,6 +19,7 @@ public class CameraTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider enteredCollider)
     {
+        Debug.Log(enteredCollider.name);
         onTriggerEnter(enteredCollider);
     }
 
