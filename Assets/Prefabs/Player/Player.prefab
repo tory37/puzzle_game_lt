@@ -1398,7 +1398,7 @@ MonoBehaviour:
   cameraController: {fileID: 114561788523127002}
   targetLocationMarkerPrefab: {fileID: 1798138381326364, guid: ee0561cf91c444e438eaa78dc55da9e2,
     type: 2}
-  minTargetDistance: 0.5
+  minTargetDistance: 2
   maxTargetDistance: 5
   targetZoomSpeed: 30
 --- !u!114 &114561788523127002

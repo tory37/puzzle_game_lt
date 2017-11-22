@@ -25,12 +25,11 @@ public class Teleportation : PlayerAbility
 
     private bool phaseOneComplete = false;
 
-    private float currentTargetDistance;
     private GameObject instantiatedTargetLocationMarker;
 
     private void Start()
     {
-        currentTargetDistance = minTargetDistance;
+
     }
 
     private void Update()
@@ -46,7 +45,10 @@ public class Teleportation : PlayerAbility
         else
         {
             float zoomInput = Input.GetAxis(InputNames.Scroll);
-
+            if (phaseOneComplete)
+            {
+                ZoomTarget(zoomInput);
+            }
         }
     }
 
@@ -68,6 +70,8 @@ public class Teleportation : PlayerAbility
         Quaternion targetRotation = cameraController.GetCameraTransform().rotation;
         instantiatedTargetLocationMarker = Instantiate(targetLocationMarkerPrefab, targetPosition, targetRotation);
         instantiatedTargetLocationMarker.transform.SetParent(cameraController.GetCameraTransform());
+
+        phaseOneComplete = true;
     }
 
     private void OnTakeCameraControlFailure()
@@ -78,9 +82,10 @@ public class Teleportation : PlayerAbility
     private void ZoomTarget(float zoomInput)
     {
         float deltaZoom = zoomInput * targetZoomSpeed * Time.deltaTime;
-        Vector3 direction = instantiatedTargetLocationMarker.transform.forward;
+        float currentTargetDistance = instantiatedTargetLocationMarker.transform.localPosition.magnitude;
+        Vector3 direction = Vector3.forward;
         currentTargetDistance = Mathf.Clamp(currentTargetDistance + deltaZoom, minTargetDistance, maxTargetDistance);
-        Vector3 targetLocalPosition = instantiatedTargetLocationMarker.transform.forward * currentTargetDistance;
+        Vector3 targetLocalPosition = direction * currentTargetDistance;
         instantiatedTargetLocationMarker.transform.localPosition = targetLocalPosition;
     }
 
