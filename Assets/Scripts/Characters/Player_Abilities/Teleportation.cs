@@ -13,6 +13,8 @@ public class Teleportation : PlayerAbility
     private ThirdPersonCameraController cameraController;
     [SerializeField]
     private GameObject targetLocationMarkerPrefab;
+    [SerializeField]
+    private Rigidbody playerRigidbody;
 
     [Header("Variables")]
     [SerializeField]
@@ -21,6 +23,10 @@ public class Teleportation : PlayerAbility
     private float maxTargetDistance;
     [SerializeField]
     private float targetZoomSpeed;
+    [SerializeField]
+    private LayerMask targetRaycastLayermask;
+
+    private float currentTargetDistance;
 
 
     private bool phaseOneComplete = false;
@@ -41,6 +47,10 @@ public class Teleportation : PlayerAbility
             {
                 TriggerPhaseOne();
             }
+            else
+            {
+                TriggerPhaseTwo();
+            }
         }
         else
         {
@@ -60,12 +70,23 @@ public class Teleportation : PlayerAbility
             OnTakeCameraControlFailure);
     }
 
+    private void TriggerPhaseTwo()
+    {
+        Destroy(instantiatedTargetLocationMarker);
+        Vector3 cameraPosition = cameraController.GetCameraTransform().position;
+        playerRigidbody.MovePosition(instantiatedTargetLocationMarker.transform.position);
+        cameraController.GetCameraTransform().position = cameraPosition;
+        cameraController.AttemptReleaseControl(this);
+        phaseOneComplete = false;
+    }
+
     private void OnTakeCameraControlSuccess()
     {
-        playerMovement.enabled = false;
-        Debug.Log(cameraController.AttemptDisableCameraZoom(this));
+        //playerMovement.enabled = false;
+        cameraController.AttemptDisableCameraZoom(this);
         cameraController.SetTargetZoom(0.0f, this);
 
+        currentTargetDistance = minTargetDistance;
         Vector3 targetPosition = cameraController.GetCameraTransform().position + (cameraController.GetCameraTransform().forward * minTargetDistance);
         Quaternion targetRotation = cameraController.GetCameraTransform().rotation;
         instantiatedTargetLocationMarker = Instantiate(targetLocationMarkerPrefab, targetPosition, targetRotation);
@@ -82,11 +103,23 @@ public class Teleportation : PlayerAbility
     private void ZoomTarget(float zoomInput)
     {
         float deltaZoom = zoomInput * targetZoomSpeed * Time.deltaTime;
-        float currentTargetDistance = instantiatedTargetLocationMarker.transform.localPosition.magnitude;
         Vector3 direction = Vector3.forward;
         currentTargetDistance = Mathf.Clamp(currentTargetDistance + deltaZoom, minTargetDistance, maxTargetDistance);
         Vector3 targetLocalPosition = direction * currentTargetDistance;
-        instantiatedTargetLocationMarker.transform.localPosition = targetLocalPosition;
+
+        RaycastHit hit;
+        Transform cameraTransform = cameraController.GetCameraTransform();
+#if UNITY_EDITOR
+        Debug.DrawRay(cameraTransform.position, cameraTransform.forward * currentTargetDistance, Color.red);
+#endif
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, currentTargetDistance, targetRaycastLayermask))
+        {
+            instantiatedTargetLocationMarker.transform.position = hit.point;
+        }
+        else
+        {
+            instantiatedTargetLocationMarker.transform.localPosition = targetLocalPosition;
+        }
     }
 
     private void GetTargetLocation()

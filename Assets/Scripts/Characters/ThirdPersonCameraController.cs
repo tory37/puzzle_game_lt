@@ -225,32 +225,39 @@ public class ThirdPersonCameraController : MonoBehaviour
         return caller == controllingBehaviour;
     }
 
-    public bool AttemptTakeControl(MonoBehaviour caller, ThirdPersonCameraTakeControlCallback onSuccess, ThirdPersonCameraTakeControlCallback onFailure)
+    public bool AttemptTakeControl(MonoBehaviour caller, ThirdPersonCameraTakeControlCallback onSuccess = null, ThirdPersonCameraTakeControlCallback onFailure = null)
     {
         if (controllingBehaviour == null)
         {
             controllingBehaviour = caller;
-            onSuccess();
+            if (onSuccess != null)
+                onSuccess();
             return true;
         }
         else
         {
-            onFailure();
+            if (onFailure != null)
+                onFailure();
             return false;
         }
     }
 
-    public bool AttemptReleaseControl(MonoBehaviour caller, ThirdPersonCameraReleaseControlCallback onSuccess, ThirdPersonCameraReleaseControlCallback onFailure)
+    public bool AttemptReleaseControl(MonoBehaviour caller, ThirdPersonCameraReleaseControlCallback onSuccess = null, ThirdPersonCameraReleaseControlCallback onFailure = null)
     {
         if (controllingBehaviour == caller)
         {
+            AttemptEnableCameraRotation(caller);
+            AttemptEnableCameraZoom(caller);
             controllingBehaviour = null;
-            onSuccess();
+            controlledZoomLocalPosition = null;
+            if (onSuccess != null)
+                onSuccess();
             return true;
         }
         else
         {
-            onFailure();
+            if (onFailure != null)
+                onFailure();
             return false;
         }
     }
