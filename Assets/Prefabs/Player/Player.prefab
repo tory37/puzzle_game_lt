@@ -112,6 +112,8 @@ GameObject:
   - component: {fileID: 20520039546408490}
   - component: {fileID: 124737181173919468}
   - component: {fileID: 81134745329389856}
+  - component: {fileID: 135345165368173066}
+  - component: {fileID: 114860543639934118}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -266,7 +268,8 @@ GameObject:
   - component: {fileID: 114856127648263718}
   - component: {fileID: 114561788523127002}
   - component: {fileID: 54803054332046556}
-  - component: {fileID: 135375953537202732}
+  - component: {fileID: 114451442195270032}
+  - component: {fileID: 114356680843118430}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -433,6 +436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4469605655844550}
   - component: {fileID: 137080985719187132}
+  - component: {fileID: 135239061466960482}
   m_Layer: 0
   m_Name: ghost
   m_TagString: Untagged
@@ -1318,7 +1322,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!81 &81134745329389856
 AudioListener:
@@ -1364,6 +1368,43 @@ MonoBehaviour:
   jumpRaycastLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114356680843118430
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1304519646105602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a3773d49cac44b7ae89a25b7dee223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilities:
+  - {fileID: 114451442195270032}
+--- !u!114 &114451442195270032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1304519646105602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5fbae75796484d7db56d09fb7172f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  playerController: {fileID: 114009987953642536}
+  playerMovement: {fileID: 114856127648263718}
+  cameraController: {fileID: 114561788523127002}
+  targetLocationMarkerPrefab: {fileID: 1798138381326364, guid: ee0561cf91c444e438eaa78dc55da9e2,
+    type: 2}
+  playerRigidbody: {fileID: 54803054332046556}
+  minTargetDistance: 5
+  maxTargetDistance: 20
+  targetZoomSpeed: 30
+  targetRaycastLayermask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &114561788523127002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1378,13 +1419,16 @@ MonoBehaviour:
   cameraTransform: {fileID: 4671631328913128}
   cameraRigX: {fileID: 4193216968820840}
   cameraRigY: {fileID: 4291621364246630}
+  cameraTrigger: {fileID: 114860543639934118}
+  playerRenderer: {fileID: 137080985719187132}
   cameraHorizontalSpeed: 30
   cameraVerticalSpeed: 50
-  minVerticalAngle: -10
+  minVerticalAngle: -25
   maxVerticalAngle: 45
   cameraZoomSpeed: 30
   farthestCameraOffset: {x: 1.3, y: 2, z: -15}
   cameraAdjustmentSpeed: 60
+  cameraPlayerRendererToggleDistance: 2.5
 --- !u!114 &114856127648263718
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1407,6 +1451,17 @@ MonoBehaviour:
     m_Bits: 4294967295
   targetRotationTransform: {fileID: 4291621364246630}
   modelTransform: {fileID: 4626902460565728}
+--- !u!114 &114860543639934118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1141288522556564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 674d47dd8551f459eaf7f3305992407c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!124 &124737181173919468
 Behaviour:
   m_ObjectHideFlags: 1
@@ -1414,18 +1469,30 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1141288522556564}
   m_Enabled: 1
---- !u!135 &135375953537202732
+--- !u!135 &135239061466960482
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1304519646105602}
+  m_GameObject: {fileID: 1581757246375294}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.1
-  m_Center: {x: 0, y: 1.1, z: 0}
+  m_Center: {x: 0, y: 0, z: 1.2}
+--- !u!135 &135345165368173066
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1141288522556564}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!137 &137080985719187132
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
