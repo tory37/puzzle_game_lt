@@ -1322,7 +1322,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!81 &81134745329389856
 AudioListener:
@@ -1398,9 +1398,13 @@ MonoBehaviour:
   cameraController: {fileID: 114561788523127002}
   targetLocationMarkerPrefab: {fileID: 1798138381326364, guid: ee0561cf91c444e438eaa78dc55da9e2,
     type: 2}
-  minTargetDistance: 2
-  maxTargetDistance: 5
+  playerRigidbody: {fileID: 54803054332046556}
+  minTargetDistance: 5
+  maxTargetDistance: 20
   targetZoomSpeed: 30
+  targetRaycastLayermask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &114561788523127002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1419,7 +1423,7 @@ MonoBehaviour:
   playerRenderer: {fileID: 137080985719187132}
   cameraHorizontalSpeed: 30
   cameraVerticalSpeed: 50
-  minVerticalAngle: -10
+  minVerticalAngle: -25
   maxVerticalAngle: 45
   cameraZoomSpeed: 30
   farthestCameraOffset: {x: 1.3, y: 2, z: -15}
