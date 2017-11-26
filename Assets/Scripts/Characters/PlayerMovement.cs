@@ -36,17 +36,20 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    private void Start() {
+    private void Start()
+    {
         targetRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         Move();
         Rotate();
         Jump();
     }
 
-    public void Move() {
+    public void Move()
+    {
         float forwardInput = Input.GetAxis(InputNames.Forward);
         float strafeInput = Input.GetAxis(InputNames.Strafe);
 
@@ -60,7 +63,8 @@ public class PlayerMovement : MonoBehaviour
         targetRigidbody.MovePosition(targetRigidbody.position + deltaMovementVector);
     }
 
-    public void Rotate() {
+    public void Rotate()
+    {
         if (ShouldRotateModel())
         {
             Quaternion targetRotation = targetRotationTransform.rotation;
@@ -69,10 +73,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void Jump() {
-        #if UNITY_EDITOR
+    public void Jump()
+    {
+#if UNITY_EDITOR
         Debug.DrawRay(targetRigidbody.position + jumpRaycastOffset, -targetRigidbody.transform.up * jumpRaycastDistance, Color.red);
-        #endif
+#endif
 
         if (CanJump())
         {
@@ -85,7 +90,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private bool ShouldRotateModel() {
+    private bool ShouldRotateModel()
+    {
         bool bLookButtonHeld = Input.GetButton(InputNames.Mouse_Right);
         bool bMovingForward = !Input.GetAxis(InputNames.Forward).Equals(0.0f);
         bool bStrafing = !Input.GetAxis(InputNames.Strafe).Equals(0.0f);
