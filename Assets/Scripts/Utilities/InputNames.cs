@@ -19,4 +19,5 @@ public class InputNames
     public const string Shift_Ability_Up = "Shift Ability Up";
     public const string Shift_Ability_Down = "Shift Ability Down";
     public const string Ability_Trigger = "Ability Trigger";
+    public const string Ability_Cancel = "Ability Cancel";
 }

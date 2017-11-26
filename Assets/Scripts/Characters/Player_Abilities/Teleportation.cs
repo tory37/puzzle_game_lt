@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Teleportation : PlayerAbility
 {
+    #region Serialized Variables
     [Header("Components")]
     [SerializeField]
     private PlayerController playerController;
@@ -25,62 +27,38 @@ public class Teleportation : PlayerAbility
     private float targetZoomSpeed;
     [SerializeField]
     private LayerMask targetRaycastLayermask;
+    #endregion
 
+    #region Private Variables
     private float currentTargetDistance;
 
-
-    private bool phaseOneComplete = false;
-
     private GameObject instantiatedTargetLocationMarker;
+    #endregion
 
-    private void Start()
-    {
+    #region Entry State
+    private MonoFSM.State stateEntry;
 
-    }
-
-    private void Update()
+    private void EntryStateOnCheckTransitions()
     {
         bool triggered = Input.GetButtonDown(InputNames.Ability_Trigger);
         if (triggered)
         {
-            if (!phaseOneComplete)
+            if (cameraController.AttemptTakeControl(this))
             {
-                TriggerPhaseOne();
+                Transition(stateChooseTargetLocation);
             }
             else
             {
-                TriggerPhaseTwo();
-            }
-        }
-        else
-        {
-            float zoomInput = Input.GetAxis(InputNames.Scroll);
-            if (phaseOneComplete)
-            {
-                ZoomTarget(zoomInput);
+                //TODO: Implement a failure case if theres a chance something else could be controlling the camera
             }
         }
     }
+    #endregion
 
-    private void TriggerPhaseOne()
-    {
-        cameraController.AttemptTakeControl(
-            this,
-            OnTakeCameraControlSuccess,
-            OnTakeCameraControlFailure);
-    }
+    #region ChooseTargetLocation State
+    private MonoFSM.State stateChooseTargetLocation;
 
-    private void TriggerPhaseTwo()
-    {
-        Destroy(instantiatedTargetLocationMarker);
-        Vector3 cameraPosition = cameraController.GetCameraTransform().position;
-        playerRigidbody.MovePosition(instantiatedTargetLocationMarker.transform.position);
-        cameraController.GetCameraTransform().position = cameraPosition;
-        cameraController.AttemptReleaseControl(this);
-        phaseOneComplete = false;
-    }
-
-    private void OnTakeCameraControlSuccess()
+    private void ChooseTargetLocationStateOnEnter()
     {
         //playerMovement.enabled = false;
         cameraController.AttemptDisableCameraZoom(this);
@@ -91,13 +69,65 @@ public class Teleportation : PlayerAbility
         Quaternion targetRotation = cameraController.GetCameraTransform().rotation;
         instantiatedTargetLocationMarker = Instantiate(targetLocationMarkerPrefab, targetPosition, targetRotation);
         instantiatedTargetLocationMarker.transform.SetParent(cameraController.GetCameraTransform());
-
-        phaseOneComplete = true;
     }
 
-    private void OnTakeCameraControlFailure()
+    private void ChooseTargetLocationStateOnUpdate()
     {
+        float zoomInput = Input.GetAxis(InputNames.Scroll);
+        ZoomTarget(zoomInput);
+    }
 
+    private void ChooseTargetLocationStateOnCheckTransitions()
+    {
+        bool triggered = Input.GetButtonDown(InputNames.Ability_Trigger);
+        if (triggered)
+        {
+            Vector3 cameraPosition = cameraController.GetCameraTransform().position;
+            playerRigidbody.MovePosition(instantiatedTargetLocationMarker.transform.position);
+            cameraController.GetCameraTransform().position = cameraPosition;
+
+            Transition(stateEntry);
+        }
+        else
+        {
+            bool canceled = Input.GetButtonDown(InputNames.Ability_Cancel);
+
+            if (canceled)
+            {
+                Transition(stateEntry);
+            }
+        }
+    }
+
+    private void ChooseTargetLocationStateOnExit()
+    {
+        playerRigidbody.MoveRotation(Quaternion.Euler(0.0f, instantiatedTargetLocationMarker.transform.rotation.y, 0.0f));
+        cameraController.AttemptReleaseControl(this);
+        Destroy(instantiatedTargetLocationMarker);
+    }
+    #endregion
+
+    private void Start()
+    {
+        stateEntry = new MonoFSM.State(
+            null,
+            null,
+            null,
+            null,
+            EntryStateOnCheckTransitions,
+            null
+        );
+
+        stateChooseTargetLocation = new MonoFSM.State(
+            ChooseTargetLocationStateOnEnter,
+            ChooseTargetLocationStateOnUpdate,
+            null,
+            null,
+            ChooseTargetLocationStateOnCheckTransitions,
+            ChooseTargetLocationStateOnExit
+        );
+
+        Transition(stateEntry);
     }
 
     private void ZoomTarget(float zoomInput)
@@ -120,10 +150,5 @@ public class Teleportation : PlayerAbility
         {
             instantiatedTargetLocationMarker.transform.localPosition = targetLocalPosition;
         }
-    }
-
-    private void GetTargetLocation()
-    {
-
     }
 }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MultiTag {
+public enum MultiTag
+{
     // This is a solid object for player to jump off of
     Jumpable,
     // This means that the camera should not collide into this object
@@ -12,14 +13,14 @@ public enum MultiTag {
 
 }
 
-public class MultiTagSystem : MonoBehaviour {
+public class MultiTagSystem : MonoBehaviour
+{
 
     [SerializeField]
     private List<MultiTag> tags;
 
-    public bool HasTag(MultiTag tag) {
-        if (tags.Contains(tag))
-            return true;
-        return false;
+    public bool HasTag(MultiTag tag)
+    {
+        return tags.Contains(tag);
     }
 }
