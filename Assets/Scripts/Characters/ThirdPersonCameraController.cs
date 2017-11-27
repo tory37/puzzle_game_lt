@@ -39,6 +39,8 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     [Header("Zoom")]
     [SerializeField]
+    private bool zoomEnabled = true;
+    [SerializeField]
     private float cameraZoomSpeed = 5.0f;
     [SerializeField]
     [Tooltip("Farthest Camera Offset")]
@@ -56,7 +58,6 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private MonoBehaviour controllingBehaviour = null;
     private bool rotationEnabled;
-    private bool zoomEnabled;
     private Vector3? controlledZoomLocalPosition = null;
 
     #endregion
@@ -65,12 +66,11 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private void Start()
     {
-        targetCameraLocalPosition = cameraTransform.position;
-        userTargetCameraPosition = cameraTransform.position;
+        targetCameraLocalPosition = cameraTransform.localPosition;
+        userTargetCameraPosition = farthestCameraOffset;
         cameraTransform.localPosition = farthestCameraOffset;
 
         rotationEnabled = true;
-        zoomEnabled = true;
 
         cameraTrigger.Subscribe(HandleOnCameraTriggerEnter, HandleOnCameraTriggerExit);
     }

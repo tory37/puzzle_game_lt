@@ -88,18 +88,23 @@ public class MonoFSM : MonoBehaviour
     #region Mono Methods
     private void Update()
     {
-        currentState.OnUpdate();
+        if (currentState != null)
+            currentState.OnUpdate();
     }
 
     private void FixedUpdate()
     {
-        currentState.OnFixedUpdate();
+        if (currentState != null)
+            currentState.OnFixedUpdate();
     }
 
     private void LateUpdate()
     {
-        currentState.OnLateUpdate();
-        currentState.OnChechTransitions();
+        if (currentState != null)
+        {
+            currentState.OnLateUpdate();
+            currentState.OnChechTransitions();
+        }
     }
     #endregion
 
